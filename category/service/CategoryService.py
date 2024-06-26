@@ -1,10 +1,11 @@
 from category.schema.CategorySchema import CategoryRequest;
-from sqlalchemy.orm import Session;
 from category.models.Category import Category;
+from config.DataBase import SessionLocal;
 
 class CategoryService:
     
-    def createCategory(request: CategoryRequest,db: Session) -> dict:
+    def createCategory(request: CategoryRequest) -> dict:
+        db = SessionLocal();
         existCategory = db.query(Category).filter(Category.name == request.name).first();
         
         if existCategory:
@@ -15,7 +16,8 @@ class CategoryService:
         db.close();
         return {"message":"categoria registrada con exito"},{"status_code":201};
     
-    def getCategoryById(id:int,db:Session) -> dict:
+    def getCategoryById(id:int) -> dict:
+        db = SessionLocal();
         existCategory = db.query(Category).filter(Category.categoryId == id).first();
         
         if not existCategory:
@@ -24,7 +26,8 @@ class CategoryService:
         return {"message":existCategory},{"status_code":200};
 
     
-    def updateCategory(id:int,db:Session,request:CategoryRequest) -> dict:
+    def updateCategory(id:int,request:CategoryRequest) -> dict:
+        db = SessionLocal();
         existCategory = db.query(Category).filter(Category.categoryId == id).first();
         
         if not existCategory:
@@ -38,7 +41,8 @@ class CategoryService:
         
         return {"message":"actualiozacion con exito"},{"status_code":200};
     
-    def deleteCategory(id: int,db: Session) -> dict:
+    def deleteCategory(id: int) -> dict:
+        db = SessionLocal();
         existCategory = db.query(Category).filter(Category.categoryId == id).first();
         
         if not existCategory:

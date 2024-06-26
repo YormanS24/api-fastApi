@@ -1,14 +1,15 @@
 from user.schema.UserSchema import UserRequest;
-from sqlalchemy.orm import Session;
 from passlib.context import CryptContext;
 from user.models.User import User;
 from auth.jwt.JwtManager import createToken;
+from config.DataBase import SessionLocal;
 
 bycrit = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class AuthService:
     
-    def login(request: UserRequest,db: Session)-> dict:
+    def login(request: UserRequest)-> dict:
+        db = SessionLocal();
         existsUser = db.query(User).filter(User.name == request.name).first();
         
         if not existsUser:

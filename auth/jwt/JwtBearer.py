@@ -1,5 +1,4 @@
 from fastapi import HTTPException,Request;
-from fastapi.encoders import jsonable_encoder;
 from fastapi.security import HTTPBearer;
 from auth.jwt.JwtManager import validateToken;
 from config.DataBase import SessionLocal;

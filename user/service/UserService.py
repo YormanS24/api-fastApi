@@ -1,13 +1,15 @@
 from user.schema.UserSchema import UserRequest;
-from sqlalchemy.orm import Session;
 from user.models.User import User;
 from passlib.context import CryptContext;
+from config.DataBase import SessionLocal;
 
 bycrit = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class UserService:
     
-    def createUser(request:UserRequest,db: Session)-> dict:
+    def createUser(request:UserRequest)-> dict:
+        db = SessionLocal();
+        
         existsUser = db.query(User).filter(User.name == request.name).first();
         
         if existsUser: 

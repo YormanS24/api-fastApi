@@ -1,11 +1,12 @@
 from movie.schema.MovieSchema import MovieRequest,MovieUpdateRequest;
-from sqlalchemy.orm import Session;
 from movie.models.Movie import Movie;
 from category.models.Category import Category;
+from config.DataBase import SessionLocal;
 
 class MovieService:
     
-    def createMovie(request: MovieRequest,db: Session)-> dict:
+    def createMovie(request: MovieRequest)-> dict:
+        db = SessionLocal();
         
         if not db.query(Category).filter(Category.categoryId == request.categoryId).first():
             return {"message":"la categoria no se encuentra resgitrada"},{"status_code":404};
@@ -20,7 +21,9 @@ class MovieService:
         
         return {"message":"pelicula fue registrada con exito"},{"status_code":201};
     
-    def getMovie(id:int,db: Session)-> dict:
+    def getMovie(id:int)-> dict:
+        db = SessionLocal();
+        
         existMovie = db.query(Movie).filter(Movie.movieId == id).first();
         
         if not existMovie:
@@ -28,7 +31,9 @@ class MovieService:
         
         return {"message":existMovie},{"status_code":200};
     
-    def updateMovie(request: MovieUpdateRequest,id: int,db: Session)->dict:
+    def updateMovie(request: MovieUpdateRequest,id: int)->dict:
+        db = SessionLocal();
+        
         existMovie = db.query(Movie).filter(Movie.movieId == id).first();
         
         if not existMovie: 
@@ -40,7 +45,9 @@ class MovieService:
         
         return {"message":"pelicula actualizada con exito"},{"status_code":200};
     
-    def deleteMovie(db: Session, id: int) -> dict:
+    def deleteMovie(id: int) -> dict:
+        db = SessionLocal();
+        
         existMovie = db.query(Movie).filter(Movie.movieId == id).first();
         
         if not existMovie:
